@@ -1,0 +1,3 @@
+include ':TheXSelector'
+include ':app'
+rootProject.name = "XSelector"
