@@ -7,20 +7,21 @@ package com.fee.thexselector
  * Time: 16:31<br>
  * <P>DESC:
  * 对应 <selector>
- *      <item
- *      android:state_pressed="false"
- *      android:state_enabled="true"
+        <item
+        android:state_pressed="false"
+        android:state_enabled="true"
         android:state_accelerated="false"
         android:state_checked="false"
 
         android:drawable="@color/colorPrimary"
         />
- * </selector>
- * 中的一个 item配置
+   </selector>
+ * 中的一个 <item>配置,每一个 <item> 为多个状态 对应一种 android:drawable 属性
+ * 本类的 [SVT] 即代表 android:drawable 属性对应的类型
  * </p>
  * ******************(^_^)***********************
  */
-open class StateItem<SVT>(private var stateValue: SVT?) {
+open class StateItem<SVT>(private var stateItemValue: SVT?) {
 
     /**
      * 本 item的状态属性集，因为可以多个状态属性
@@ -32,7 +33,7 @@ open class StateItem<SVT>(private var stateValue: SVT?) {
         val checkedState = StateAttr.CHECKED.atrrValue
         val addedStateValue = if(checked) checkedState else -checkedState
         stateAttrs.add(addedStateValue)
-        stateAttrs.remove(-addedStateValue)//表示如果添加相同状态下的一个值，那么必须把该状态下的反状态值给去除，因为不支持
+        stateAttrs.remove(-addedStateValue)//表示如果添加相同状态下的一个值，那么必须把该状态下的反状态值给去除，因为不支持:
         //android:state_checked="false" 又 android:state_checked="true"
         return this
     }
@@ -119,12 +120,14 @@ open class StateItem<SVT>(private var stateValue: SVT?) {
         return this
     }
 
-
-    fun stateValue(finalStateValue: SVT?) {
-        this.stateValue = finalStateValue
+    fun stateItemValue(finalStateValue: SVT?): StateItem<SVT> {
+        this.stateItemValue = finalStateValue
+        return this
     }
-
-    fun collectItemAttrsValueInfo(): Pair<IntArray, SVT?> {
-        return Pair(stateAttrs.toIntArray(), stateValue)
+    /**
+     * 本 <item>的各状态 属性 所对应的 android:drawable 的 Pair关系
+     */
+    fun itemStatesPairStateValue(): Pair<IntArray, SVT?> {
+        return Pair(stateAttrs.toIntArray(), stateItemValue)
     }
 }

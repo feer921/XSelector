@@ -9,12 +9,14 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.fee.thexselector.XSelector
 
 import com.fee.xselector.R
@@ -25,7 +27,11 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //如果 在AndroidMenifest中申请了 android:largeHeap="true" 则值会不同
+        // 没申请前：196608 KB
+        // 如果申请了，eg.: 524288 KB
+        val appCanUseMemory = Runtime.getRuntime().maxMemory().div(1024).toInt()
+        Log.e("LoginActivity", "Max memory is  appCanUseMemory = $appCanUseMemory KB");
         setContentView(R.layout.activity_login)
 
         val username = findViewById<EditText>(R.id.username)
