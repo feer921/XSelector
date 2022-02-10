@@ -11,12 +11,12 @@ import android.content.Context
  * </p>
  * ******************(^_^)***********************
  */
-class XSelector private constructor(){
+class XSelector private constructor() {
     private lateinit var mContext: Context
 
-    companion object Instance{
+    companion object Instance {
         @JvmStatic
-        val me:XSelector by lazy {
+        val me: XSelector by lazy(LazyThreadSafetyMode.NONE) {
             XSelector()
         }
     }

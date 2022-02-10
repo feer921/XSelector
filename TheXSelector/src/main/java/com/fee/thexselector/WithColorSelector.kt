@@ -286,12 +286,13 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
     }
 
     /**
-     *
+     * 设置让 未设置的状态的 状态值时 是否 需要使用透明 来代替
      */
     fun isAllDefColorTransparent(isAllDefColorTransparent: Boolean): I {
         this.isAllDefColorTransparent = isAllDefColorTransparent
         return self()
     }
+
     protected fun peekResource() :Resources?{
         return XSelector.me.getContext()?.resources
     }

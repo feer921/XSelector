@@ -25,10 +25,14 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
 
     /**
      * 本 item的状态属性集，因为可以多个状态属性
-     * 如果本状态属性为 null或者 empty，则表示默认的 item
+     * 如果本状态属性为 null或者 empty，则表示本 item 为<selector> 中默认的 item
      */
     private val stateAttrs: HashSet<Int> = hashSetOf()
 
+    /**
+     * 增加：<item> android:state_checked = [checked] </item> 的状态属性：check状态
+     * 注：多次调用的话，以最后一次的值为准
+     */
     fun stateChecked(checked: Boolean) : StateItem<SVT>{
         val checkedState = StateAttr.CHECKED.atrrValue
         val addedStateValue = if(checked) checkedState else -checkedState
@@ -37,6 +41,11 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
         //android:state_checked="false" 又 android:state_checked="true"
         return this
     }
+
+    /**
+     * 增加：<item> android:state_pressed = [pressed] </item>的状态属性：点击状态
+     * 注：多次调用的话，以最后一次的值为准
+     */
     fun statePressed(pressed: Boolean): StateItem<SVT> {
         val pressedState = StateAttr.PRESSED.atrrValue
         val addedStateValue = if(pressed) pressedState else -pressedState
@@ -44,6 +53,11 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
         stateAttrs.remove(-addedStateValue)//表示如果添加相同状态下的一个值，那么必须把该状态下的反状态值给去除，因为不支持
         return this
     }
+
+    /**
+     * 增加：<item> android:state_focused = [focused] </item>的状态属性: 焦点状态
+     * 注：多次调用的话，以最后一次的值为准
+     */
     fun stateFocused(focused: Boolean): StateItem<SVT>{
         val defState = StateAttr.FOCUSED.atrrValue
         val addedStateValue = if (focused) defState else -defState
@@ -51,6 +65,11 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
         stateAttrs.remove(-addedStateValue)//表示如果添加相同状态下的一个值，那么必须把该状态下的反状态值给去除，因为不支持
         return this
     }
+
+    /**
+     * 增加：<item> android:state_enabled = [enabled] </item>的状态属性: 使能状态
+     * 注：多次调用的话，以最后一次的值为准
+     */
     fun stateEnabled(enabled: Boolean): StateItem<SVT>{
         val defState = StateAttr.ENABLED.atrrValue
         val addedStateValue = if (enabled) defState else -defState
@@ -59,6 +78,10 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
         return this
     }
 
+    /**
+     * 增加：<item> android:state_selected = [selected] </item>的状态属性: 选中状态
+     * 注：多次调用的话，以最后一次的值为准
+     */
     fun stateSelected(selected: Boolean): StateItem<SVT>{
         val defState = StateAttr.SELECTED.atrrValue
         val addedStateValue = if (selected) defState else -defState
@@ -120,12 +143,17 @@ open class StateItem<SVT>(private var stateItemValue: SVT?) {
         return this
     }
 
+    /**
+     * 本 状态集 对应的 最终 value
+     */
     fun stateItemValue(finalStateValue: SVT?): StateItem<SVT> {
         this.stateItemValue = finalStateValue
         return this
     }
+
     /**
      * 本 <item>的各状态 属性 所对应的 android:drawable 的 Pair关系
+     * 调用此方法后，即对外 相当于组成了一 <item> </item>
      */
     fun itemStatesPairStateValue(): Pair<IntArray, SVT?> {
         return Pair(stateAttrs.toIntArray(), stateItemValue)
