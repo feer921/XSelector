@@ -17,10 +17,13 @@ import android.widget.TextView
 class ColorSelector : WithColorSelector<ColorStateList, TextView, ColorSelector>() {
     private var isColor4Hint = false
 
-    override fun into(theEffectedView: TextView) {
-        if (stateResult == null) {
-            stateResult = build()
-        }
+    /**
+     * 将 本Selector构建的 状态选择对象设置给[theEffectedView]
+     * @param theEffectedView 要适用各状态 Selector的 View
+     * @param isNeedReBuild 是否需要重新构建出 [selector] 结果
+     */
+    override fun into(theEffectedView: TextView, isNeedReBuild: Boolean): ColorSelector {
+        build(isNeedReBuild)
         if (stateResult != null) {
             if (isColor4Hint) {
                 theEffectedView.setHintTextColor(stateResult)
@@ -28,8 +31,8 @@ class ColorSelector : WithColorSelector<ColorStateList, TextView, ColorSelector>
                 theEffectedView.setTextColor(stateResult)
             }
         }
+        return self()
     }
-
 
     /**
      * 构建出 stateResult

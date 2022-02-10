@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.fee.thexselector.ShapeItem
 import com.fee.thexselector.XSelector
 
 import com.fee.xselector.R
@@ -42,6 +43,19 @@ class LoginActivity : AppCompatActivity() {
             .pressedState(Color.RED)
             .disabledState(Color.GRAY)
 //            .isDefColorTransparent(false)
+            .into(login)
+
+        XSelector.drawableSelector()
+            .pressedState(Color.GREEN)
+            .defState(Color.GRAY)
+            .into(login)
+//            .defState(null)
+            .pressedState(null)
+            .into(username,true)
+
+        ShapeItem().solidColor(Color.RED)
+            .corners(20f)
+            .stroke(Color.BLACK,8,3f,3f)
             .into(login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 

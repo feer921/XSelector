@@ -19,6 +19,8 @@ class XSelector private constructor() {
         val me: XSelector by lazy(LazyThreadSafetyMode.NONE) {
             XSelector()
         }
+
+        fun drawableSelector() = DrawableSelector()
     }
 
     fun init(context: Context) {

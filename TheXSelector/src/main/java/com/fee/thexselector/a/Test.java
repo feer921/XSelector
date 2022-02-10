@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 
 import com.fee.thexselector.ColorSelector;
+import com.fee.thexselector.ShapeItem;
 import com.fee.thexselector.StateItem;
 import com.fee.thexselector.StateItemDrawable;
 
