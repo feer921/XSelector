@@ -9,8 +9,8 @@
     android:shape="rectangle"
     >
 
-    <solid android:color="#fff"
-        />
+<!--    <solid android:color="#fff"-->
+<!--        />-->
 
     <stroke
         android:color="#f00"
@@ -21,15 +21,11 @@
 
 <!--  有 层级先后  -->
     <gradient
-        android:type="linear"
-        android:angle="80"
+        android:type="radial"
         android:centerColor="#999"
-        android:centerX="9"
-        android:centerY="9"
         android:endColor="#f00"
-        android:gradientRadius="8dp"
         android:startColor="#800"
-        android:useLevel="false"
+        android:gradientRadius="80dp"
         />
 
     <padding android:left="1dp"

@@ -17,7 +17,9 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.fee.thexselector.DrawableSelector
 import com.fee.thexselector.ShapeItem
+import com.fee.thexselector.ShapeSelector
 import com.fee.thexselector.XSelector
 
 import com.fee.xselector.R
@@ -39,24 +41,47 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         XSelector.me.colorSelector()
-            .defState(Color.YELLOW)
-            .pressedState(Color.RED)
-            .disabledState(Color.GRAY)
+            .stateDef(Color.YELLOW)
+            .statePressed(Color.RED)
+            .stateDisabled(Color.GRAY)
 //            .isDefColorTransparent(false)
             .into(login)
 
         XSelector.drawableSelector()
-            .pressedState(Color.GREEN)
-            .defState(Color.GRAY)
+            .statePressed(Color.GREEN)
+            .stateDef(Color.GRAY)
             .into(login)
 //            .defState(null)
-            .pressedState(null)
+            .statePressed(null)
             .into(username,true)
 
-        ShapeItem().solidColor(Color.RED)
-            .corners(20f)
+        ShapeItem()
+            .solidColor(Color.RED)
+            .corners(20f) //复用了 圆角属性
+//            .gradientRadial(Color.GRAY,Color.CYAN,Color.RED,160f)
             .stroke(Color.BLACK,8,3f,3f)
+            .attachSelector(DrawableSelector())
+            .asStateDefOfSelector()
+            .solidColor(Color.YELLOW)
+            .stroke(Color.BLUE,9,3f,3f)
+            .asStatePressedOfSelector()
             .into(login)
+
+//        ShapeSelector()
+//            .stateDef {
+//                solidColor(Color.RED)
+//                corners(20f)
+//                stroke(Color.BLACK,8,3f,3f)
+//            }
+//            .statePressed {
+//                solidColor(Color.YELLOW)
+//                corners(20f)
+//                stroke(Color.BLUE,8,3f,3f)
+//            }
+//            .stateDisabled {
+//
+//            }
+//            .into(login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())

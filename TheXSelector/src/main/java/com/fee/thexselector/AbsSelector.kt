@@ -55,7 +55,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 1、默认的状态: <item android:drawable="[defValue]" />
      */
-    open fun defState(defValue: VT?): I {
+    open fun stateDef(defValue: VT?): I {
         defStateValue = defValue
         return self()
     }
@@ -63,7 +63,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 2、处于焦点状态: <item android:state_focused="true" android:drawable="[focusedValue]" />
      */
-    open fun focusedState(focusedValue: VT?): I {
+    open fun stateFocused(focusedValue: VT?): I {
         stateMapValue[INDEX_FOCUSED_STATE] = focusedValue
         return self()
     }
@@ -71,7 +71,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 3、处于点击状态: <item android:state_pressed="true" android:drawable="[pressedValue]" />
      */
-    open fun pressedState(pressedValue: VT?): I {
+    open fun statePressed(pressedValue: VT?): I {
         stateMapValue[INDEX_PRESSED_STATE] = pressedValue
         return self()
     }
@@ -79,7 +79,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 4、处于使能 enable 状态: <item android:state_enabled="true" android:drawable="[enableValue]" />
      */
-    open fun enableState(enableValue: VT?): I {
+    open fun stateEnable(enableValue: VT?): I {
         stateMapValue[INDEX_ENABLED_STATE] = enableValue
         return self()
     }
@@ -87,7 +87,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 5、处于使能 disabled 状态: <item android:state_enabled="false" android:drawable="[disabledValue]" />
      */
-    open fun disabledState(disabledValue: VT?): I {
+    open fun stateDisabled(disabledValue: VT?): I {
         stateMapValue[INDEX_DISABLED_STATE] = disabledValue
         return self()
     }
@@ -95,7 +95,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 6、处于选中 checked 状态: <item android:state_checked="true" android:drawable="[checkedValue]" />
      */
-    open fun checkedState(checkedValue: VT?): I {
+    open fun stateChecked(checkedValue: VT?): I {
         stateMapValue[INDEX_CHECKED_STATE] = checkedValue
         return self()
     }
@@ -103,7 +103,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
     /**
      * 7、处于选中 selected 状态: <item android:state_selected="true" android:drawable="[selectedValue]" />
      */
-    open fun selectedState(selectedValue: VT?): I {
+    open fun stateSelected(selectedValue: VT?): I {
         stateMapValue[INDEX_SELECTED_STATE] = selectedValue
         return self()
     }

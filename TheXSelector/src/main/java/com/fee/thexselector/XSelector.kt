@@ -12,6 +12,7 @@ import android.content.Context
  * ******************(^_^)***********************
  */
 class XSelector private constructor() {
+
     private lateinit var mContext: Context
 
     companion object Instance {
@@ -21,6 +22,8 @@ class XSelector private constructor() {
         }
 
         fun drawableSelector() = DrawableSelector()
+
+        fun shapeItem() = ShapeItem()
     }
 
     fun init(context: Context) {

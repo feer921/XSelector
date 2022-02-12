@@ -43,7 +43,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        defState(paresedColorInt)
+        stateDef(paresedColorInt)
         return self()
     }
     /**
@@ -59,7 +59,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        defState(colorValue ?: if (isAllDefColorTransparent) 0 else null)
+        stateDef(colorValue ?: if (isAllDefColorTransparent) 0 else null)
         return self()
     }
 
@@ -79,7 +79,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        focusedState(paresedColorInt)
+        stateFocused(paresedColorInt)
         return self()
     }
 
@@ -96,7 +96,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        focusedState(colorValue ?: if (isAllDefColorTransparent) 0 else null)
+        stateFocused(colorValue ?: if (isAllDefColorTransparent) 0 else null)
         return self()
     }
 
@@ -116,7 +116,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if(isAllDefColorTransparent)0 else null
             }
         }
-        pressedState(paresedColorInt)
+        statePressed(paresedColorInt)
         return self()
     }
 
@@ -133,7 +133,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        pressedState(colorValue ?: if(isAllDefColorTransparent)0 else null)
+        statePressed(colorValue ?: if(isAllDefColorTransparent)0 else null)
         return self()
     }
 
@@ -153,7 +153,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        enableState(paresedColorInt)
+        stateEnable(paresedColorInt)
         return self()
     }
 
@@ -170,7 +170,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        enableState(colorValue ?: if(isAllDefColorTransparent)0 else null)
+        stateEnable(colorValue ?: if(isAllDefColorTransparent)0 else null)
         return self()
     }
 
@@ -190,7 +190,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        disabledState(paresedColorInt)
+        stateDisabled(paresedColorInt)
         return self()
     }
 
@@ -207,7 +207,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        disabledState(colorValue ?: if(isAllDefColorTransparent)0 else null)
+        stateDisabled(colorValue ?: if(isAllDefColorTransparent)0 else null)
         return self()
     }
 
@@ -227,7 +227,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        checkedState(paresedColorInt)
+        stateChecked(paresedColorInt)
         return self()
     }
 
@@ -244,7 +244,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 0
             }
         }
-        checkedState(colorValue ?: if(isAllDefColorTransparent)0 else null)
+        stateChecked(colorValue ?: if(isAllDefColorTransparent)0 else null)
         return self()
     }
     /**
@@ -263,7 +263,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
                 if (isAllDefColorTransparent) 0 else null
             }
         }
-        selectedState(paresedColorInt)
+        stateSelected(paresedColorInt)
         return self()
     }
 
@@ -281,7 +281,7 @@ abstract class WithColorSelector<SR,V: View, I: WithColorSelector<SR, V, I>> : A
             }
         }
         val finalColor: Int? = colorValue ?: if (isAllDefColorTransparent) 0 else null
-        selectedState(finalColor)
+        stateSelected(finalColor)
         return self()
     }
 

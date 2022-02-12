@@ -52,15 +52,24 @@ import androidx.annotation.Px
 </shape>
  */
 class ShapeItem : ISelector<Drawable, View, ShapeItem> {
+
     @ShapeType
-    var shapeType = GradientDrawable.RECTANGLE
+    private var shapeType = GradientDrawable.RECTANGLE
 
     /**
      * 1、对应  <solid android:color="#fff" />属性
      */
     @ColorInt
-    var solidColor: Int? = null
-
+    private var solidColor: Int? = null
+    set(value) {
+        field = value
+        if (value != null) {
+            gradientType = null // solid 与 gradient 是互斥的
+        }
+    }
+    /**
+     * @param targetShapeType 本 ShapeItem 的 形状类型；注：kotlin不支持 @Indef的注解限制
+     */
     fun shape(@ShapeType targetShapeType: Int): ShapeItem{
         shapeType = targetShapeType
         return this
@@ -78,9 +87,9 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
     }
 
     @Px
-    var sizeWidth: Int? = null
+    private var sizeWidth: Int? = null
     @Px
-    var sizeHeight: Int? = null
+    private var sizeHeight: Int? = null
 
     /**
      * 2、对应 配置 <size android:width="[sizeWidth]"
@@ -203,16 +212,26 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
      */
     @GradientType
     private var gradientType: Int? = null
+    set(value) {
+        field = value
+        if (value != null) {
+            solidColor = null // solid 与 gradient 是互斥的
+        }
+    }
+    /**
+     * 渐变 方向
+     */
+    private var gradientOrientation: GradientDrawable.Orientation? = null
     /** 渐变角度 **/
-    private var gradientAngle: Int? = null
+//    private var gradientAngle: Int? = null
     private var gradientUseLevel: Boolean? = null
-    private var gradientCenterX: Int? = null
-    private var gradientCenterY: Int? = null
+    private var gradientCenterX: Float? = null
+    private var gradientCenterY: Float? = null
     /**
      * 渐变 半径
      */
     @Px
-    private var gradientRadius: Int? = null
+    private var gradientRadius: Float? = null
     @ColorInt
     private var gradientStartColor: Int? = null
 
@@ -223,40 +242,92 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
     private var gradientEndColor: Int? = null
 
     /**
+     * @param gradientType [GradientDrawable.LINEAR_GRADIENT] 线性渐变
+     *                     [GradientDrawable.RADIAL_GRADIENT]  辐射渐变 (由中心向外扩展发射)
+     *                  [GradientDrawable.SWEEP_GRADIENT]  扫描渐变(类似雷达的顺时/逆时 方向)扫描
+     *
+     * @param gradientOrientation 渐变(线性渐变)方向，当当前为 线性渐变时有效 <br/>
+     *                   <ul>
+     *                       <i> [GradientDrawable.Orientation.BOTTOM_TOP]</i>
+     *                   </ul>
+     * @param gradientRadius 渐变(辐射)半径，当当前为 辐射渐变时有效
      * 6、相当于配置 <gradient android:type="[gradientType]"
      *                     android:startColor="[startColor]"
                             android:centerColor="[centerColor]"
                             android:endColor="[endColor]"
-                            android:angle="[angle]"
                             android:gradientRadius="[gradientRadius]"
                             android:centerX="[centerX]"
                             android:centerY="[centerY]"
                             android:useLevel="[useLevel]"
                         />
+
+
      */
     fun gradient(
         @GradientType gradientType: Int? = null,
         @ColorInt startColor: Int? = null,
         @ColorInt centerColor: Int? = null,
         @ColorInt endColor: Int? = null,
-        angle: Int? = null,
-        @Px gradientRadius: Int? = null,
-        centerX: Int? = null,
-        centerY: Int? = null,
+        gradientOrientation: GradientDrawable.Orientation? = null,
+        @Px gradientRadius: Float? = null,
+        centerX: Float? = null,
+        centerY: Float? = null,
         useLevel: Boolean? = null
     ): ShapeItem {
         this.gradientType = gradientType
         gradientStartColor = startColor
         gradientCenterColor = centerColor
         gradientEndColor = endColor
-        gradientAngle = angle
+        this.gradientOrientation = gradientOrientation
         this.gradientRadius = gradientRadius
         gradientCenterX = centerX
         gradientCenterY = centerY
         gradientUseLevel = useLevel
         return this
     }
+
+    /**
+     * 简便的 渐变(线性渐变类型): 只常用、有效属性：颜色、渐变方向
+     */
+    fun gradientLinear(@ColorInt startColor: Int? = null,
+                       @ColorInt centerColor: Int? = null,
+                       @ColorInt endColor: Int? = null,
+                       gradientOrientation: GradientDrawable.Orientation? = null) : ShapeItem{
+        return gradient(
+            GradientDrawable.LINEAR_GRADIENT, startColor, centerColor, endColor,
+            gradientOrientation
+        )
+    }
+
+    /**
+     * 简便的 渐变(辐射渐变类型): 只常用、有效属性：颜色、辐射半径、中心点 X、Y坐标
+     */
+    fun gradientRadial(@ColorInt startColor: Int? = null,
+                       @ColorInt centerColor: Int? = null,
+                       @ColorInt endColor: Int? = null,
+                       @Px gradientRadius: Float? = null,
+                       centerX: Float? = null,
+                       centerY: Float? = null) : ShapeItem {
+        return gradient(
+            GradientDrawable.RADIAL_GRADIENT, startColor, centerColor, endColor, null,
+            gradientRadius, centerX, centerY
+        )
+    }
+
+    /**
+     * 简便 渐变(扫描渐变)类型：只常用、有效属性：颜色、
+     */
+    fun gradientaionSweep(@ColorInt startColor: Int? = null,
+                          @ColorInt centerColor: Int? = null,
+                          @ColorInt endColor: Int? = null,
+                          centerX: Float? = null,
+                          centerY: Float? = null) : ShapeItem{
+        return gradient(GradientDrawable.SWEEP_GRADIENT,startColor,centerColor,endColor,null,
+            null,centerX,centerY)
+    }
     // gradient ----------------- @end ---------------
+
+    private var shapeItemResult: Drawable? = null
     /**
      * 构建出 stateResult
      * @return [SR] 构建出的 状态集结果对象
@@ -325,6 +396,48 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
             }
         }
         //6、gradient
+        val isConfigedGradient = when (gradientType) {
+            GradientDrawable.LINEAR_GRADIENT -> {//设置了 线性渐变
+                gradientOrientation?.let {
+                    drawable.orientation = it
+                }
+                true
+            }
+            //<gradient  android:type="radial"
+            // android:angle="80" 无效
+            //android:useLevel="true" 时，会让渐变无效
+            GradientDrawable.RADIAL_GRADIENT ->{// 设置了 辐射类型 渐变,
+                gradientRadius?.let {
+                    drawable.gradientRadius = it
+                }
+                true
+            }
+            GradientDrawable.SWEEP_GRADIENT -> {//设置了 扫描类型 渐变
+                true
+            }
+            else -> { false }
+        }
+        if (!isConfigedGradient) {
+            return drawable
+        }
+        gradientType?.let {
+            drawable.gradientType = it
+        }
+        if (gradientCenterX != null && gradientCenterY != null) {
+            drawable.setGradientCenter(gradientCenterX!!, gradientCenterY!!)
+        }
+        if (gradientStartColor != null || gradientCenterColor != null || gradientEndColor != null) {
+            val gradientColors = intArrayOf(
+                gradientStartColor ?: -1, gradientCenterColor ?: -1,
+                gradientEndColor ?: -1
+            ).filter {
+                it != -1
+            }.toIntArray()
+            drawable.colors = gradientColors
+        }
+        gradientUseLevel?.let {
+            drawable.useLevel = it
+        }
         return drawable
     }
 
@@ -334,10 +447,61 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
      * @param isNeedReBuild 是否需要重新构建出 [selector] 结果
      */
     override fun into(theEffectedView: View, isNeedReBuild: Boolean): ShapeItem {
-        build()?.let {
+        if (ownerSelector != null) {
+            ownerSelector?.into(theEffectedView,isNeedReBuild)
+            return this
+        }
+        if (shapeItemResult == null || isNeedReBuild) {
+            shapeItemResult = build()
+        }
+        shapeItemResult?.let {
             theEffectedView.background = it
         }
         return this
     }
 
+    private var ownerSelector: DrawableSelector? = null
+
+    fun attachSelector(ownerSelector: DrawableSelector?) : ShapeItem{
+        this.ownerSelector = ownerSelector
+        return this
+    }
+
+    /**
+     * 1、本 [ShapeItem] 作为 [Selector]的 默认状态 item 项
+     */
+    fun asStateDefOfSelector() : ShapeItem {
+        ownerSelector?.stateDef(build())
+        return this
+    }
+
+    fun asStateSelectedOfSelector() : ShapeItem {
+        ownerSelector?.stateSelected(build())
+        return this
+    }
+
+    fun asStateCheckedOfSelector() : ShapeItem {
+        ownerSelector?.stateChecked(build())
+        return this
+    }
+
+    fun asStateEnableOfSelector() : ShapeItem {
+        ownerSelector?.stateEnable(build())
+        return this
+    }
+
+    fun asStateDisableOfSelector() : ShapeItem {
+        ownerSelector?.stateDisabled(build())
+        return this
+    }
+
+    fun asStatePressedOfSelector(): ShapeItem  {
+        ownerSelector?.statePressed(build())
+        return this
+    }
+
+    fun asStateFocusedOfSelector(): ShapeItem{
+        ownerSelector?.stateFocused(build())
+        return this
+    }
 }

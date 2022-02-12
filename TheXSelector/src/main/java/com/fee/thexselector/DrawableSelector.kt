@@ -7,68 +7,68 @@ import android.view.View
 import androidx.annotation.ColorInt
 
 /**
- * 构建[Drawable]
+ * 构建[Drawable] 作为各状态的  Selector
  */
 class DrawableSelector : AbsSelector<Drawable, View, Drawable, DrawableSelector>() {
 
 
-    fun defState(@ColorInt defColor: Int) : DrawableSelector {
-        return defState(ColorDrawable(defColor))
+    fun stateDef(@ColorInt defColor: Int) : DrawableSelector {
+        return stateDef(ColorDrawable(defColor))
     }
 
-    fun defState(defColorStr: String): DrawableSelector {
-        return defState(parseColorStrToInt(defColorStr))
-    }
-
-
-    fun focusedState(@ColorInt focusedColor: Int) : DrawableSelector {
-        return focusedState(ColorDrawable(focusedColor))
-    }
-
-    fun focusedState(focusedColorStr: String): DrawableSelector {
-        return focusedState(parseColorStrToInt(focusedColorStr))
+    fun stateDef(defColorStr: String): DrawableSelector {
+        return stateDef(parseColorStrToInt(defColorStr))
     }
 
 
-    fun pressedState(@ColorInt pressedColor: Int) : DrawableSelector {
-        return pressedState(ColorDrawable(pressedColor))
+    fun stateFocused(@ColorInt focusedColor: Int) : DrawableSelector {
+        return stateFocused(ColorDrawable(focusedColor))
     }
 
-    fun pressedState(pressedColorStr: String): DrawableSelector {
-        return pressedState(parseColorStrToInt(pressedColorStr))
-    }
-
-    fun enableState(@ColorInt enableColor: Int) : DrawableSelector {
-        return enableState(ColorDrawable(enableColor))
-    }
-
-    fun enableState(enableColorStr: String): DrawableSelector {
-        return enableState(parseColorStrToInt(enableColorStr))
+    fun stateFocused(focusedColorStr: String): DrawableSelector {
+        return stateFocused(parseColorStrToInt(focusedColorStr))
     }
 
 
-    fun disabledState(@ColorInt disabledColor: Int) : DrawableSelector {
-        return disabledState(ColorDrawable(disabledColor))
+    fun statePressed(@ColorInt pressedColor: Int) : DrawableSelector {
+        return statePressed(ColorDrawable(pressedColor))
     }
 
-    fun disabledState(disabledColorStr: String): DrawableSelector {
-        return disabledState(parseColorStrToInt(disabledColorStr))
+    fun statePressed(pressedColorStr: String): DrawableSelector {
+        return statePressed(parseColorStrToInt(pressedColorStr))
     }
 
-    fun checkedState(@ColorInt checkedColor: Int) : DrawableSelector {
-        return checkedState(ColorDrawable(checkedColor))
+    fun stateEnable(@ColorInt enableColor: Int) : DrawableSelector {
+        return stateEnable(ColorDrawable(enableColor))
     }
 
-    fun checkedState(checkedColorStr: String): DrawableSelector {
-        return checkedState(parseColorStrToInt(checkedColorStr))
+    fun stateEnable(enableColorStr: String): DrawableSelector {
+        return stateEnable(parseColorStrToInt(enableColorStr))
     }
 
-    fun selectedState(@ColorInt selectedColor: Int) : DrawableSelector {
-        return selectedState(ColorDrawable(selectedColor))
+
+    fun stateDisabled(@ColorInt disabledColor: Int) : DrawableSelector {
+        return stateDisabled(ColorDrawable(disabledColor))
     }
 
-    fun selectedState(selectedColorStr: String): DrawableSelector {
-        return selectedState(parseColorStrToInt(selectedColorStr))
+    fun stateDisabled(disabledColorStr: String): DrawableSelector {
+        return stateDisabled(parseColorStrToInt(disabledColorStr))
+    }
+
+    fun stateChecked(@ColorInt checkedColor: Int) : DrawableSelector {
+        return stateChecked(ColorDrawable(checkedColor))
+    }
+
+    fun stateChecked(checkedColorStr: String): DrawableSelector {
+        return stateChecked(parseColorStrToInt(checkedColorStr))
+    }
+
+    fun stateSelected(@ColorInt selectedColor: Int) : DrawableSelector {
+        return stateSelected(ColorDrawable(selectedColor))
+    }
+
+    fun stateSelected(selectedColorStr: String): DrawableSelector {
+        return stateSelected(parseColorStrToInt(selectedColorStr))
     }
 
     /**
