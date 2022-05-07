@@ -1,6 +1,7 @@
 package com.fee.xselector.ui.login
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import androidx.lifecycle.Observer
 import android.os.Bundle
@@ -8,27 +9,46 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.LayoutInflaterCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.fee.thexselector.DrawableSelector
 import com.fee.thexselector.ShapeItem
 import com.fee.thexselector.ShapeSelector
 import com.fee.thexselector.XSelector
+import com.fee.xselector.*
 
-import com.fee.xselector.R
+class LoginActivity : BaseActivity() {
 
-class LoginActivity : AppCompatActivity() {
+    init {
+        Log.i(TAG, "-->构造方法...")
+        addOnContextAvailableListener {
+            Log.i(TAG, "-->构造方法... 监听了  上下文有效")
+        }
+//        delegate.installViewFactory()//java.lang.IllegalStateException: System services not available to Activities before onCreate()
 
+    }
     private lateinit var loginViewModel: LoginViewModel
 
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+//        layoutInflater//注意，调用这个时，此时还没有 window
+//        delegate
+        val factory = LayoutInflaterFactory2()
+        factory.mViewDecorator = CustomTypeFaceViewDecorator(SkinViewDecorator())
+        factory.replaceFactory2(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
+        //这里的执行 比 addOnContextAvailableListener()的回调稍早 -------------
         super.onCreate(savedInstanceState)
         //如果 在AndroidMenifest中申请了 android:largeHeap="true" 则值会不同
         // 没申请前：196608 KB
@@ -164,6 +184,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
+
 }
 
 /**
