@@ -29,6 +29,8 @@ import com.fee.xselector.*
 
 class LoginActivity : BaseActivity() {
 
+    private var mFaceTest: FaceTest? = null
+
     init {
         Log.i(TAG, "-->构造方法...")
         addOnContextAvailableListener {
@@ -170,6 +172,11 @@ class LoginActivity : BaseActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        mFaceTest = FaceTest()
+        mFaceTest?.getFaceSimila()
+    }
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
@@ -183,6 +190,11 @@ class LoginActivity : BaseActivity() {
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun finish() {
+        super.finish()
+        mFaceTest?.release()
     }
 
 }
