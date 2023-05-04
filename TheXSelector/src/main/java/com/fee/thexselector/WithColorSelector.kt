@@ -6,7 +6,6 @@ import android.text.TextUtils
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.annotation.NonNull
-import androidx.core.text.TextUtilsCompat
 
 /**
  * ******************(^_^)***********************<br>

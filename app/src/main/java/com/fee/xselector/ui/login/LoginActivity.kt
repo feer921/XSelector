@@ -29,8 +29,6 @@ import com.fee.xselector.*
 
 class LoginActivity : BaseActivity() {
 
-    private var mFaceTest: FaceTest? = null
-
     init {
         Log.i(TAG, "-->构造方法...")
         addOnContextAvailableListener {
@@ -174,8 +172,6 @@ class LoginActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        mFaceTest = FaceTest()
-        mFaceTest?.getFaceSimila()
     }
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
@@ -194,7 +190,6 @@ class LoginActivity : BaseActivity() {
 
     override fun finish() {
         super.finish()
-        mFaceTest?.release()
     }
 
 }

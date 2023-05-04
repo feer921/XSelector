@@ -20,7 +20,7 @@ class ColorSelector : WithColorSelector<ColorStateList, TextView, ColorSelector>
     /**
      * 将 本Selector构建的 状态选择对象设置给[theEffectedView]
      * @param theEffectedView 要适用各状态 Selector的 View
-     * @param isNeedReBuild 是否需要重新构建出 [selector] 结果
+     * @param isNeedReBuild 是否需要重新构建出 [ColorSelector] 结果
      */
     override fun into(theEffectedView: TextView, isNeedReBuild: Boolean): ColorSelector {
         build(isNeedReBuild)

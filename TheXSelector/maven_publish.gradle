@@ -1,12 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-//apply plugin: 'java'
 
-
-//java {
-//    withJavadocJar()
-//    withSourcesJar()
-//}
 
 //加载配置参数
 Properties p = new Properties()
@@ -49,12 +43,6 @@ def SIGN_SECRET_KEYRING_FILE = getProperty(p4Secret, 'signing.secretKeyRingFile'
 
 private def getProperty(Properties p, String key) {
     return p.getProperty(key)
-}
-
-//用于打包源代码的任务
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from android.sourceSets.main.java.srcDirs
 }
 
 //afterEvaluate {
@@ -108,11 +96,6 @@ task androidSourcesJar(type: Jar) {
                 afterEvaluate {
                     from components.release
                 }
-//                artifact androidSourcesJar
-
-//            artifact generateSourcesJar //需要上传的source jar
-//            artifact generateJavadoc //需要上传的java doc
-//            artifact makeJar //需要上传的资源jar路径或者是aar路径，这边可以填写一个生成jar的task，如makeJar方法就是一个生成jar的task
             }
         }
         repositories {
@@ -135,9 +118,3 @@ signing {
 //    useInMemoryPgpKeys(SIGN_KEYID, SIGN_PW)
 //    sign stuffZip
 }
-
-//javadoc {
-//    if(JavaVersion.current().isJava9Compatible()) {
-//        options.addBooleanOption('html5', true)
-//    }
-//}

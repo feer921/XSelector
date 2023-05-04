@@ -118,6 +118,7 @@ abstract class AbsSelector<SR, V : View, VT, I : AbsSelector<SR, V, VT, I>> : IS
 //        android.R.attr.state_checked
 //    }
 
+    @Suppress("UNCHECKED_CAST")
     protected fun self() = this as I
 
 
