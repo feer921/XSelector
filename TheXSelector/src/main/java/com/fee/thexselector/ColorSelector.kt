@@ -81,4 +81,5 @@ class ColorSelector : WithColorSelector<ColorStateList, TextView, ColorSelector>
         return self()
     }
 
+    fun withShapeItem() = ShapeItem()
 }

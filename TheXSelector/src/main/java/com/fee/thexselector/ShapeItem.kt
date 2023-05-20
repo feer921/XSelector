@@ -11,44 +11,44 @@ import androidx.annotation.Px
  * @author feer921
  * 对应于 xx.shape.xml 编写 Shape
  * <shape xmlns:android="http://schemas.android.com/apk/res/android"
-        android:shape="rectangle"
-        >
-       1:
-        <corners android:radius="9dp"
-        android:topLeftRadius="9dp"
-        android:topRightRadius="9dp"
-        android:bottomLeftRadius="9dp"
-        android:bottomRightRadius="9dp"
-        />
-        2:
-        <solid android:color="#fff" />
-        3:
-        <stroke android:color="#f00"
-            android:width="1dp"
-            android:dashWidth="1dp"
-            android:dashGap="2dp"
-        />
-        4:
-        <gradient android:type="linear"
-            android:angle="80"
-            android:centerColor="#999"
-            android:centerX="9"
-            android:centerY="9"
-            android:endColor="#f00"
-            android:gradientRadius="8dp"
-            android:startColor="#800"
-            android:useLevel="false"
-        />
-        5:
-        <padding android:left="1dp"
-        android:top="2dp"
-        android:right="5dp"
-        android:bottom="8dp"
-        />
-        6:
-        <size android:width="119dp"
-            android:height="100dp"
-            />
+android:shape="rectangle"
+>
+1:
+<corners android:radius="9dp"
+android:topLeftRadius="9dp"
+android:topRightRadius="9dp"
+android:bottomLeftRadius="9dp"
+android:bottomRightRadius="9dp"
+/>
+2:
+<solid android:color="#fff" />
+3:
+<stroke android:color="#f00"
+android:width="1dp"
+android:dashWidth="1dp"
+android:dashGap="2dp"
+/>
+4:
+<gradient android:type="linear"
+android:angle="80"
+android:centerColor="#999"
+android:centerX="9"
+android:centerY="9"
+android:endColor="#f00"
+android:gradientRadius="8dp"
+android:startColor="#800"
+android:useLevel="false"
+/>
+5:
+<padding android:left="1dp"
+android:top="2dp"
+android:right="5dp"
+android:bottom="8dp"
+/>
+6:
+<size android:width="119dp"
+android:height="100dp"
+/>
 </shape>
  */
 class ShapeItem : ISelector<Drawable, View, ShapeItem> {
@@ -61,12 +61,12 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
      */
     @ColorInt
     private var solidColor: Int? = null
-    set(value) {
-        field = value
-        if (value != null) {
-            gradientType = null // solid 与 gradient 是互斥的
+        set(value) {
+            field = value
+            if (value != null) {
+                gradientType = null // solid 与 gradient 是互斥的
+            }
         }
-    }
     /**
      * @param targetShapeType 本 ShapeItem 的 形状类型；注：kotlin不支持 @Indef的注解限制
      */
@@ -93,8 +93,8 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
 
     /**
      * 2、对应 配置 <size android:width="[sizeWidth]"
-                android:height="[sizeHeight]"
-            />
+    android:height="[sizeHeight]"
+    />
      */
     fun sizeWidth(@Px sizeWidth: Int?,@Px sizeHeight: Int?): ShapeItem{
         this.sizeWidth = sizeWidth
@@ -115,10 +115,10 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
 
     /**
      * 3、相当于配置 <padding android:left="[left]"
-                        android:top="[top]"
-                        android:right="[right]"
-                        android:bottom="[bottom]"
-                    />
+    android:top="[top]"
+    android:right="[right]"
+    android:bottom="[bottom]"
+    />
      */
     fun padding(@Px left: Int,@Px top: Int,@Px right: Int, @Px bottom: Int): ShapeItem {
         paddingLeft = left
@@ -146,11 +146,11 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
 
     /**
      * 4、相当于配置 <corners android:radius="[cornerRadius]"
-                        android:topLeftRadius="[topLeftRadius]"
-                        android:topRightRadius="[topRightRadius]"
-                        android:bottomLeftRadius="[bottomLeftRadius]"
-                        android:bottomRightRadius="[bottomRightRadius]"
-                        />
+    android:topLeftRadius="[topLeftRadius]"
+    android:topRightRadius="[topRightRadius]"
+    android:bottomLeftRadius="[bottomLeftRadius]"
+    android:bottomRightRadius="[bottomRightRadius]"
+    />
      */
     fun corners(
         @Px cornerRadius: Float?, @Px topLeftRadius: Float? = null, @Px topRightRadius: Float? = null,
@@ -186,10 +186,10 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
 
     /**
      * 5、相当于配置： <stroke android:color="[strokeColor]"
-                            android:width="[strokeWidth]" //只有 >0 描边才有意义
-                            android:dashWidth="[strokeDashWidth]"
-                            android:dashGap="[strokeDashGap]"
-                        />
+    android:width="[strokeWidth]" //只有 >0 描边才有意义
+    android:dashWidth="[strokeDashWidth]"
+    android:dashGap="[strokeDashGap]"
+    />
      */
     fun stroke(
         @ColorInt strokeColor: Int,//描边颜色是可以没有(会为主题默认颜色)
@@ -212,12 +212,12 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
      */
     @GradientType
     private var gradientType: Int? = null
-    set(value) {
-        field = value
-        if (value != null) {
-            solidColor = null // solid 与 gradient 是互斥的
+        set(value) {
+            field = value
+            if (value != null) {
+                solidColor = null // solid 与 gradient 是互斥的
+            }
         }
-    }
     /**
      * 渐变 方向
      */
@@ -253,13 +253,13 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
      * @param gradientRadius 渐变(辐射)半径，当当前为 辐射渐变时有效
      * 6、相当于配置 <gradient android:type="[gradientType]"
      *                     android:startColor="[startColor]"
-                            android:centerColor="[centerColor]"
-                            android:endColor="[endColor]"
-                            android:gradientRadius="[gradientRadius]"
-                            android:centerX="[centerX]"
-                            android:centerY="[centerY]"
-                            android:useLevel="[useLevel]"
-                        />
+    android:centerColor="[centerColor]"
+    android:endColor="[endColor]"
+    android:gradientRadius="[gradientRadius]"
+    android:centerX="[centerX]"
+    android:centerY="[centerY]"
+    android:useLevel="[useLevel]"
+    />
 
 
      */
@@ -317,11 +317,11 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
     /**
      * 简便 渐变(扫描渐变)类型：只常用、有效属性：颜色、
      */
-    fun gradientaionSweep(@ColorInt startColor: Int? = null,
-                          @ColorInt centerColor: Int? = null,
-                          @ColorInt endColor: Int? = null,
-                          centerX: Float? = null,
-                          centerY: Float? = null) : ShapeItem{
+    fun gradientSweep(@ColorInt startColor: Int? = null,
+                      @ColorInt centerColor: Int? = null,
+                      @ColorInt endColor: Int? = null,
+                      centerX: Float? = null,
+                      centerY: Float? = null) : ShapeItem{
         return gradient(GradientDrawable.SWEEP_GRADIENT,startColor,centerColor,endColor,null,
             null,centerX,centerY)
     }
@@ -345,19 +345,25 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
         var eightCornerRadius: FloatArray? = null
         if (cornerTopLeftRadius != null || cornerTopRightRadius != null || cornerBottomLeftRadius != null || cornerBottomRightRadius != null) {
             eightCornerRadius = FloatArray(8){index ->
-                when (index) {
-                    0,1 -> {
+                when (index) {//顺时针方向
+                    0,1 -> {//左上角
                         cornerTopLeftRadius ?: radius
                     }
-                    2,3 -> {
+                    2,3 -> {//右上角
                         cornerTopRightRadius ?: radius
                     }
-                    4,5 -> {
-                        cornerBottomLeftRadius ?: radius
-                    }
-                    6,7 -> {
+                    4,5 -> {//右下角
                         cornerBottomRightRadius ?: radius
                     }
+                    6,7 -> {//左下角
+                        cornerBottomLeftRadius ?: radius
+                    }
+//                    4,5 -> {
+//                        cornerBottomLeftRadius ?: radius
+//                    }
+//                    6,7 -> {
+//                        cornerBottomRightRadius ?: radius
+//                    }
                     else -> {radius}
                 }
             }
