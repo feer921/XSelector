@@ -317,7 +317,7 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
     /**
      * 简便 渐变(扫描渐变)类型：只常用、有效属性：颜色、
      */
-    fun gradientaionSweep(@ColorInt startColor: Int? = null,
+    fun gradientSweep(@ColorInt startColor: Int? = null,
                           @ColorInt centerColor: Int? = null,
                           @ColorInt endColor: Int? = null,
                           centerX: Float? = null,
@@ -345,19 +345,25 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
         var eightCornerRadius: FloatArray? = null
         if (cornerTopLeftRadius != null || cornerTopRightRadius != null || cornerBottomLeftRadius != null || cornerBottomRightRadius != null) {
             eightCornerRadius = FloatArray(8){index ->
-                when (index) {
-                    0,1 -> {
+                when (index) {//顺时针方向
+                    0,1 -> {//左上角
                         cornerTopLeftRadius ?: radius
                     }
-                    2,3 -> {
+                    2,3 -> {//右上角
                         cornerTopRightRadius ?: radius
                     }
-                    4,5 -> {
-                        cornerBottomLeftRadius ?: radius
-                    }
-                    6,7 -> {
+                    4,5 -> {//右下角
                         cornerBottomRightRadius ?: radius
                     }
+                    6,7 -> {//左下角
+                        cornerBottomLeftRadius ?: radius
+                    }
+//                    4,5 -> {
+//                        cornerBottomLeftRadius ?: radius
+//                    }
+//                    6,7 -> {
+//                        cornerBottomRightRadius ?: radius
+//                    }
                     else -> {radius}
                 }
             }

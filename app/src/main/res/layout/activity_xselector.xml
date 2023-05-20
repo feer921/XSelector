@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        >
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="颜色Selector(点击颜色变化)"
+            android:gravity="center"
+            android:id="@+id/tv1"
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="仅背景"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:id="@+id/tv2"
+            />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:text="各种状态"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:id="@+id/tv3"
+            />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="圆形"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:id="@+id/tv4"
+            />
+
+    </LinearLayout>
+</ScrollView>

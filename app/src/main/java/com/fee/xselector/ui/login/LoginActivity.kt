@@ -60,7 +60,7 @@ class LoginActivity : BaseActivity() {
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
-        XSelector.me.colorSelector()
+        XSelector.colorSelector()
             .stateDef(Color.YELLOW)
             .statePressed(Color.RED)
             .stateDisabled(Color.GRAY)
@@ -75,17 +75,18 @@ class LoginActivity : BaseActivity() {
             .statePressed(null)
             .into(username,true)
 
-        ShapeItem()
-            .solidColor(Color.RED)
-            .corners(20f) //复用了 圆角属性
+        ShapeItem()//XSelector.shapeItem().
+            .solidColor(Color.RED)//默认填充颜色
+            .corners(20f) //下面其他状态下：复用了 圆角属性
+//            .corners(null,20f,20f,20f,5f)
 //            .gradientRadial(Color.GRAY,Color.CYAN,Color.RED,160f)
-            .stroke(Color.BLACK,8,3f,3f)
-            .attachSelector(DrawableSelector())
-            .asStateDefOfSelector()
-            .solidColor(Color.YELLOW)
+            .stroke(Color.BLACK,8,3f,3f)//边框
+            .attachSelector(DrawableSelector())//依附一下　Selector类型，则可以构建出各状态下的资源
+            .asStateDefOfSelector()//上面的属性参数构建Selector的默认状态资源
+            .solidColor(Color.YELLOW)//变更了填充颜色
             .stroke(Color.BLUE,9,3f,3f)
-            .asStatePressedOfSelector()
-            .into(login)
+            .asStatePressedOfSelector()//上面的属性构建Selector的点击状态下的资源
+            .into(login)//设置给控件
 
 //        ShapeSelector()
 //            .stateDef {
