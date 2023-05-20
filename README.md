@@ -5,7 +5,7 @@
 
 我们在做 **Android**　项目时，UI设计师经常会给界面上的相关控件元素设计各种的颜色、背景、点击效果，通常我们会使用　**Android　** 的 shape/selector xml来定义这些各种状态下的资源，如下图所示：
 
-![新建shape/selector xml资源文件](/Users/feer921/Library/Application Support/typora-user-images/image-20230520141043375.png)
+![新建shape/selector xml资源文件](https://github.com/feer921/XSelector/blob/main/arts/img_1.png)
 
 但是随着项目的开发进程，我们发现使用这种方式所定义的资源文件越来越多，尤其是项目组各开发人员在未沟通的情况下，可能对于相同的效果的背景资源在不知他人已经有定义过　xx.shape.xml/xx.selector.xml　的情况下，又会重复新建定义资源文件!!!
 
@@ -20,7 +20,7 @@
 
 多到密集恐怖：
 
-![冰山一角](/Users/feer921/Library/Application Support/typora-user-images/image-20230520145911160.png)
+![冰山一角](https://github.com/feer921/XSelector/blob/main/arts/img_2.png)
 
 解决：程序员面对UI设计需求的无限变更和差异化，除了沟通协定设计遵循多使用、设计主体效果，以避免太多差异化，但五彩斑斓的黑总是产品和设计师所孜孜追求的效果，因而使用代码/程序　的方式动态变更来应对仿佛是最优解，以变制变。
 
@@ -163,7 +163,7 @@ implementation 'io.github.feer921:XSelector:1.2-kotlin16'
             .into(mViewBinding.tv4)
 ```
 
-#　使用：
+# 用法：
 
 ## 给**TextView** 设置文字颜色相关的状态切换
 
