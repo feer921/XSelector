@@ -5,14 +5,20 @@ ext {
     targetSdkVersion = 33
 }
 buildscript {
-    ext.kotlin_version = "1.8.0"
+    ext.kotlin_version = "2.1.20"
     repositories {
+        // 国内镜像优先
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://mirrors.huaweicloud.com/repository/maven/' }
         google()
         mavenCentral()
     }
     dependencies {
         //classpath "com.android.tools.build:gradle:4.1.1"
-		classpath 'com.android.tools.build:gradle:7.4.2'
+		classpath 'com.android.tools.build:gradle:9.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -22,6 +28,12 @@ buildscript {
 
 allprojects {
     repositories {
+        // 国内镜像优先
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://mirrors.huaweicloud.com/repository/maven/' }
         google()
         mavenCentral()
     }

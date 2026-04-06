@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-android-extensions'
 
 
-apply from:'maven_publish.gradle' //依赖 maven 发布脚本
+//apply from:'maven_publish.gradle' //依赖 maven 发布脚本
 android {
     compileSdkVersion rootProject.compileSdkVersion
 
