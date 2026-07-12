@@ -1,0 +1,313 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+Properties publicProps = new Properties()
+File publicPropsFile = rootProject.file('maven.properties')
+if (publicPropsFile.exists()) {
+    publicPropsFile.withInputStream { publicProps.load(it) }
+}
+
+def env = { String key ->
+    System.getenv(key)
+}
+
+def prop = { String key ->
+    if (project.hasProperty(key)) {
+        return project.property(key)?.toString()
+    }
+    if (rootProject.hasProperty(key)) {
+        return rootProject.property(key)?.toString()
+    }
+    return null
+}
+
+def publicProp = { String key, String fallback = null ->
+    return publicProps.getProperty(key) ?: fallback
+}
+
+Properties secretProps = new Properties()
+def secretPath = prop('mavenCentralSecretFile')
+        ?: env('MAVEN_CENTRAL_SECRET_FILE')
+        ?: (rootProject.file('maven-secret.properties').exists()
+            ? rootProject.file('maven-secret.properties').absolutePath
+            : null)
+if (secretPath) {
+    File secretFile = file(secretPath)
+    if (secretFile.exists()) {
+        secretFile.withInputStream { secretProps.load(it) }
+    }
+}
+
+def secretProp = { String key ->
+    return secretProps.getProperty(key)
+}
+
+def valueOf = { List<String> keys, String fallback = null ->
+    for (String key : keys) {
+        def value = prop(key) ?: env(key) ?: secretProp(key) ?: publicProps.getProperty(key)
+        if (value != null && value.toString().trim().length() > 0) {
+            return value.toString()
+        }
+    }
+    return fallback
+}
+
+def groupIdValue = valueOf(['GROUP_ID'], project.group?.toString())
+def artifactIdValue = valueOf(['ARTIFACT_ID'], project.name)
+def versionValue = valueOf(['VERSION_NAME'], project.version?.toString())
+def namespaceValue = valueOf(
+        ['MAVEN_CENTRAL_NAMESPACE', 'mavenCentralNamespace', 'SONATYPE_NAMESPACE', 'sonatypeNamespace'],
+        groupIdValue
+)
+def publishingTypeValue = valueOf(
+        ['MAVEN_CENTRAL_PUBLISHING_TYPE', 'mavenCentralPublishingType'],
+        publicProp('MAVEN_CENTRAL_PUBLISHING_TYPE', 'user_managed')
+)
+def releaseRepositoryUrl = valueOf(
+        ['MAVEN_CENTRAL_RELEASE_URL', 'mavenCentralReleaseUrl'],
+        publicProp(
+                'MAVEN_CENTRAL_RELEASE_URL',
+                'https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/'
+        )
+)
+def snapshotRepositoryUrl = valueOf(
+        ['MAVEN_CENTRAL_SNAPSHOT_URL', 'mavenCentralSnapshotUrl'],
+        publicProp('MAVEN_CENTRAL_SNAPSHOT_URL', 'https://central.sonatype.com/repository/maven-snapshots/')
+)
+def isSnapshotVersion = versionValue?.endsWith('-SNAPSHOT')
+
+def mavenCentralUsername = valueOf([
+        'MAVEN_CENTRAL_USERNAME',
+        'mavenCentralUsername',
+        'SONATYPE_USERNAME',
+        'sonatypeUsername',
+        'MAVEN_USERNAME'
+])
+def mavenCentralPassword = valueOf([
+        'MAVEN_CENTRAL_PASSWORD',
+        'mavenCentralPassword',
+        'SONATYPE_PASSWORD',
+        'sonatypePassword',
+        'MAVEN_PASSWORD'
+])
+
+def signingKeyId = valueOf([
+        'MAVEN_CENTRAL_SIGNING_KEY_ID',
+        'mavenCentralSigningKeyId',
+        'signing.keyId'
+])
+def signingPassword = valueOf([
+        'MAVEN_CENTRAL_SIGNING_PASSWORD',
+        'mavenCentralSigningPassword',
+        'signing.password'
+])
+def signingKey = valueOf([
+        'MAVEN_CENTRAL_SIGNING_KEY',
+        'mavenCentralSigningKey',
+        'signing.key'
+])
+def signingKeyFile = valueOf([
+        'MAVEN_CENTRAL_SIGNING_KEY_FILE',
+        'mavenCentralSigningKeyFile',
+        'signing.keyFile'
+])
+def signingSecretKeyRingFile = valueOf([
+        'MAVEN_CENTRAL_SIGNING_SECRET_KEY_RING_FILE',
+        'mavenCentralSigningSecretKeyRingFile',
+        'signing.secretKeyRingFile'
+])
+
+def hasSigningMaterial = {
+    return (signingKey && signingPassword) ||
+            (signingKeyFile && file(signingKeyFile).exists() && signingPassword) ||
+            (signingSecretKeyRingFile && signingKeyId && signingPassword)
+}
+
+def isMavenCentralPublishTask = {
+    return gradle.taskGraph.allTasks.any { Task task ->
+        task.path == "${project.path}:publishReleasePublicationToMavenCentralRepository" ||
+                task.path == "${project.path}:publishAllPublicationsToMavenCentralRepository" ||
+                task.path == "${project.path}:publishReleaseToMavenCentralPortal" ||
+                task.path == "${project.path}:uploadMavenCentralDeployment"
+    }
+}
+
+tasks.register('mavenCentralJavadocJar', Jar) {
+    group = 'publishing'
+    description = 'Builds a placeholder Javadoc jar accepted by Maven Central.'
+    archiveClassifier.set('javadoc')
+    def readme = layout.buildDirectory.file('maven-central-javadoc/README.md')
+    doFirst {
+        File readmeFile = readme.get().asFile
+        readmeFile.parentFile.mkdirs()
+        readmeFile.text = """# ${artifactIdValue}
+
+This is a placeholder Javadoc artifact for the Android AAR publication.
+
+Source code and usage documentation are available at:
+${publicProp('POM_URL', 'https://github.com/feer921/XSelector')}
+"""
+    }
+    from(readme)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = groupIdValue
+                artifactId = artifactIdValue
+                version = versionValue
+                artifact tasks.named('mavenCentralJavadocJar')
+
+                pom {
+                    packaging = publicProp('POM_PACKAGING', 'aar')
+                    name = publicProp('POM_NAME', artifactIdValue)
+                    description = publicProp('POM_DESCRIPTION', artifactIdValue)
+                    url = publicProp('POM_URL', '')
+                    inceptionYear = publicProp('POM_INCEPTION_YEAR', '')
+
+                    licenses {
+                        license {
+                            name = publicProp('POM_LICENCE_NAME', 'The Apache Software License, Version 2.0')
+                            url = publicProp('POM_LICENCE_URL', 'https://www.apache.org/licenses/LICENSE-2.0.txt')
+                            distribution = publicProp('POM_LICENCE_DIST', 'repo')
+                            comments = publicProp('POM_LICENCE_COMMENTS', '')
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = publicProp('POM_DEVELOPER_ID', '')
+                            name = publicProp('POM_DEVELOPER_NAME', '')
+                            email = publicProp('POM_DEVELOPER_EMAIL', '')
+                            url = publicProp('POM_DEVELOPER_URL', '')
+                        }
+                    }
+
+                    scm {
+                        url = publicProp('POM_SCM_URL', '')
+                        connection = publicProp('POM_SCM_CONNECTION', '')
+                        developerConnection = publicProp('POM_SCM_DEV_CONNECTION', '')
+                    }
+
+                    issueManagement {
+                        system = publicProp('POM_ISSUE_MANAGEMENT_SYSTEM', '')
+                        url = publicProp('POM_ISSUE_MANAGEMENT_URL', '')
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = 'MavenCentral'
+                url = uri(isSnapshotVersion ? snapshotRepositoryUrl : releaseRepositoryUrl)
+                credentials {
+                    username = mavenCentralUsername ?: ''
+                    password = mavenCentralPassword ?: ''
+                }
+            }
+        }
+    }
+
+    signing {
+        required {
+            isMavenCentralPublishTask()
+        }
+
+        if (signingKey) {
+            if (signingKeyId) {
+                useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+            } else {
+                useInMemoryPgpKeys(signingKey, signingPassword)
+            }
+        } else if (signingKeyFile && file(signingKeyFile).exists()) {
+            String signingKeyFromFile = file(signingKeyFile).getText('UTF-8')
+            if (signingKeyId) {
+                useInMemoryPgpKeys(signingKeyId, signingKeyFromFile, signingPassword)
+            } else {
+                useInMemoryPgpKeys(signingKeyFromFile, signingPassword)
+            }
+        } else if (signingSecretKeyRingFile) {
+            project.ext['signing.keyId'] = signingKeyId
+            project.ext['signing.password'] = signingPassword
+            project.ext['signing.secretKeyRingFile'] = signingSecretKeyRingFile
+        }
+
+        sign publishing.publications.release
+    }
+
+    tasks.register('validateMavenCentralPublishConfig') {
+        group = 'publishing'
+        description = 'Validates Maven Central credentials and signing configuration.'
+        doLast {
+            List<String> missingValues = []
+            if (!groupIdValue) missingValues << 'GROUP_ID'
+            if (!artifactIdValue) missingValues << 'ARTIFACT_ID'
+            if (!versionValue) missingValues << 'VERSION_NAME'
+            if (!namespaceValue) missingValues << 'MAVEN_CENTRAL_NAMESPACE'
+            if (!mavenCentralUsername) missingValues << 'MAVEN_CENTRAL_USERNAME'
+            if (!mavenCentralPassword) missingValues << 'MAVEN_CENTRAL_PASSWORD'
+            if (!hasSigningMaterial()) {
+                missingValues << 'signing key material'
+            }
+            if (!isSnapshotVersion && !releaseRepositoryUrl.contains('ossrh-staging-api.central.sonatype.com')) {
+                logger.warn("Maven Central release URL is '${releaseRepositoryUrl}', not the Central Portal OSSRH Staging API URL.")
+            }
+            if (!missingValues.isEmpty()) {
+                throw new GradleException("Missing Maven Central publishing configuration: ${missingValues.join(', ')}. " +
+                        "Provide values via Gradle properties, environment variables, or an external secret file.")
+            }
+        }
+    }
+
+    tasks.register('uploadMavenCentralDeployment') {
+        group = 'publishing'
+        description = 'Moves the just-published OSSRH Staging API repository into Central Portal.'
+        dependsOn 'publishReleasePublicationToMavenCentralRepository'
+        dependsOn 'validateMavenCentralPublishConfig'
+        onlyIf {
+            !isSnapshotVersion
+        }
+        doLast {
+            String auth = Base64.encoder.encodeToString("${mavenCentralUsername}:${mavenCentralPassword}".getBytes('UTF-8'))
+            String endpoint = "https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/${namespaceValue}?publishing_type=${publishingTypeValue}"
+            HttpURLConnection connection = (HttpURLConnection) new URL(endpoint).openConnection()
+            connection.setRequestMethod('POST')
+            connection.setDoOutput(true)
+            connection.setRequestProperty('Authorization', "Bearer ${auth}")
+            connection.setRequestProperty('Accept', 'application/json')
+            connection.connect()
+
+            int responseCode = connection.responseCode
+            String responseText = ''
+            InputStream responseStream = responseCode >= 400 ? connection.errorStream : connection.inputStream
+            if (responseStream != null) {
+                responseText = responseStream.getText('UTF-8')
+            }
+            if (responseCode < 200 || responseCode >= 300) {
+                throw new GradleException("Central Portal upload failed with HTTP ${responseCode}: ${responseText}")
+            }
+            logger.lifecycle("Central Portal upload requested for namespace '${namespaceValue}' with publishing_type='${publishingTypeValue}'.")
+            if (responseText) {
+                logger.lifecycle(responseText)
+            }
+        }
+    }
+
+    tasks.register('publishReleaseToMavenCentralPortal') {
+        group = 'publishing'
+        description = 'Publishes the release publication to the Central Portal OSSRH Staging API and uploads it to Central Portal.'
+        dependsOn 'uploadMavenCentralDeployment'
+    }
+
+    tasks.matching { Task task ->
+        task.name == 'publishReleasePublicationToMavenCentralRepository' ||
+                task.name == 'publishAllPublicationsToMavenCentralRepository'
+    }.configureEach {
+        dependsOn 'validateMavenCentralPublishConfig'
+    }
+}

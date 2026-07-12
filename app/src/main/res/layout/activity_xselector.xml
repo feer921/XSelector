@@ -13,7 +13,7 @@
         >
         <TextView
             android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_height="60dp"
             android:text="颜色Selector(点击颜色变化)"
             android:gravity="center"
             android:id="@+id/tv1"

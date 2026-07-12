@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 //apply plugin: 'kotlin-android-extensions'
 
 
-//apply from:'maven_publish.gradle' //依赖 maven 发布脚本
+apply from:'maven_publish.gradle' // Maven Central 发布脚本
 android {
     namespace 'com.fee.thexselector'
     compileSdk = rootProject.compileSdkVersion
