@@ -432,12 +432,17 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
         if (gradientCenterX != null && gradientCenterY != null) {
             drawable.setGradientCenter(gradientCenterX!!, gradientCenterY!!)
         }
-        if (gradientStartColor != null || gradientCenterColor != null || gradientEndColor != null) {
+        val colorStart = gradientStartColor
+        val colorCenter = gradientCenterColor
+        val colorEnd = gradientEndColor
+        if (colorStart != null || colorCenter != null || colorEnd != null) {
             val gradientColors = intArrayOf(
-                gradientStartColor ?: -1, gradientCenterColor ?: -1,
-                gradientEndColor ?: -1
+                colorStart ?: 0,
+                colorCenter ?: 0,
+                colorEnd ?: 0
             ).filter {
-                it != -1
+//                it != -1 ////Color.WHITE == -1,正好把白色给过滤掉了
+                it != 0
             }.toIntArray()
             drawable.colors = gradientColors
         }

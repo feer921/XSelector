@@ -1,10 +1,10 @@
 package com.fee.xselector
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 
 /**
  */
-class MyApp : Application() {
+class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
