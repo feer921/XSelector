@@ -46,7 +46,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.annotation:annotation:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'androidx.multidex:multidex:2.0.1'
+    //with minSdk >= 21. Please remove dependency 'androidx.multidex:multidex:2.0.1' from ':app'.
+//    implementation 'androidx.multidex:multidex:2.0.1'
 //    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0' //这个库仅仅是提供 ViewModel的(已过时)
     implementation project(path: ':TheXSelector')
     testImplementation 'junit:junit:4.13.2'

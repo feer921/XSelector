@@ -2,9 +2,12 @@ package com.fee.xselector.ui.login
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.os.Build.VERSION_CODES.S
 import android.os.Bundle
-import com.fee.thexselector.ShapeType
+import android.view.View
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.fee.thexselector.XSelector
 import com.fee.xselector.BaseActivity
 import com.fee.xselector.databinding.ActivityXselectorBinding
@@ -19,12 +22,16 @@ import com.fee.xselector.databinding.ActivityXselectorBinding
  * </p>
  * ******************(^_^)***********************
  */
-class XSelectorActivity: BaseActivity() {
+class XSelectorActivity: BaseActivity(), OnApplyWindowInsetsListener {
     private lateinit var mViewBinding: ActivityXselectorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewBinding = ActivityXselectorBinding.inflate(layoutInflater)
-        setContentView(mViewBinding.root)
+        val theVB = ActivityXselectorBinding.inflate(layoutInflater)
+        mViewBinding = theVB
+        val rootView = theVB.root
+        setContentView(rootView)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, this)
+        rootView.requestApplyInsets()
         initViews()
     }
 
@@ -66,6 +73,16 @@ class XSelectorActivity: BaseActivity() {
             .shape(GradientDrawable.OVAL)
             .solidColor(Color.GRAY)
             .into(mViewBinding.tv4)
+    }
+
+    override fun onApplyWindowInsets(
+        v: View,
+        insets: WindowInsetsCompat
+    ): WindowInsetsCompat {
+        val barInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        barInsets.top
+        v.updatePadding(0, barInsets.top, 0, barInsets.bottom)
+        return insets
     }
 
 
