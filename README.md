@@ -108,7 +108,7 @@
 # 依赖
 
 ```groovy
-implementation 'io.github.feer921:XSelector:1.2' //注意该版本需要项目工程使用的　Kotlin 版本在　1.8.x及以上
+implementation "io.github.feer921:XSelector:$version" //注意该版本需要项目工程使用的　Kotlin 版本在　1.8.x及以上
 ```
 
 如果项目工程的所使用的　Kotlin　版本在　1.8 以下，则可以依赖下面的版本
