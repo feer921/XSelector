@@ -73,6 +73,13 @@ class XSelectorActivity: BaseActivity(), OnApplyWindowInsetsListener {
             .shape(GradientDrawable.OVAL)
             .solidColor(Color.GRAY)
             .into(mViewBinding.tv4)
+
+        XSelector.shapeItem()
+            .gradientLinear(
+                startColor = 0,
+                endColor = Color.RED,
+            )
+            .into(mViewBinding.tv5)
     }
 
     override fun onApplyWindowInsets(

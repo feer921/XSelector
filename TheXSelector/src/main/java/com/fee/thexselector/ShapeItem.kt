@@ -436,14 +436,28 @@ class ShapeItem : ISelector<Drawable, View, ShapeItem> {
         val colorCenter = gradientCenterColor
         val colorEnd = gradientEndColor
         if (colorStart != null || colorCenter != null || colorEnd != null) {
-            val gradientColors = intArrayOf(
-                colorStart ?: 0,
-                colorCenter ?: 0,
-                colorEnd ?: 0
-            ).filter {
-//                it != -1 ////Color.WHITE == -1,正好把白色给过滤掉了
-                it != 0
-            }.toIntArray()
+//            val gradientColors = intArrayOf(
+//                colorStart ?: 0,
+//                colorCenter ?: 0,
+//                colorEnd ?: 0
+//            )
+//                .filter {
+////                it != -1 ////Color.WHITE == -1,正好把白色给过滤掉了
+//                it != 0 //如果有0，也保留?
+//            }.toIntArray() //java.lang.IllegalArgumentException: needs >= 2 number of colors
+            //一般是　colorCenter　为null
+            val gradientColors = if (colorCenter != null) {
+                intArrayOf(
+                    colorStart ?: 0,
+                    colorCenter,
+                    colorEnd ?: 0
+                )
+            } else {
+                intArrayOf(
+                    colorStart ?: 0,
+                    colorEnd ?: 0
+                )
+            }
             drawable.colors = gradientColors
         }
         gradientUseLevel?.let {
